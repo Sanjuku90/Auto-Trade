@@ -300,15 +300,62 @@ export async function registerRoutes(
 async function seedDatabase() {
   const botsList = await storage.getBots();
   if (botsList.length === 0) {
-    // ... existing seeding logic
+    console.log("Seeding bots...");
+    const defaultBots = [
+      {
+        name: "Scalping Node v4.2",
+        type: "SCALPING",
+        description: "Exécution haute fréquence sur micro-fluctuations. Liquidité maximale et exposition temporelle minimale.",
+        riskLevel: "LOW",
+        dailyCapPercentage: "14.00",
+        status: "ACTIVE"
+      },
+      {
+        name: "Trend Following Cluster",
+        type: "TREND",
+        description: "Identification et exploitation des tendances directionnelles majeures. Optimisé pour les marchés volatils.",
+        riskLevel: "MEDIUM",
+        dailyCapPercentage: "16.00",
+        status: "ACTIVE"
+      },
+      {
+        name: "Range Boundary Engine",
+        type: "RANGE",
+        description: "Exploitation des supports et résistances en phases de latéralisation. Précision mathématique chirurgicale.",
+        riskLevel: "LOW",
+        dailyCapPercentage: "12.00",
+        status: "ACTIVE"
+      },
+      {
+        name: "Event Impact Processor",
+        type: "EVENT",
+        description: "Activation neuronale lors d'événements macroéconomiques. Fort effet de levier et rendement explosif.",
+        riskLevel: "HIGH",
+        dailyCapPercentage: "18.00",
+        status: "ACTIVE"
+      },
+      {
+        name: "Sentinel Risk Shield",
+        type: "SENTINEL",
+        description: "Protection algorithmique globale. Analyse corrélative et arrêt d'urgence en cas d'anomalie réseau.",
+        riskLevel: "LOW",
+        dailyCapPercentage: "0.00",
+        status: "ACTIVE"
+      }
+    ];
+
+    for (const bot of defaultBots) {
+      await storage.createBot(bot);
+    }
   }
 
   // Seed positions if none exist
+  const updatedBots = await storage.getBots();
   const existingPositions = await storage.getPositions();
-  if (existingPositions.length === 0 && botsList.length > 0) {
+  if (existingPositions.length === 0 && updatedBots.length > 0) {
     console.log("Seeding positions...");
     const assets = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'BNB/USDT'];
-    for (const bot of botsList) {
+    for (const bot of updatedBots) {
       for (let i = 0; i < 5; i++) {
         await storage.createPosition({
           botId: bot.id,
@@ -318,7 +365,8 @@ async function seedDatabase() {
           exitPrice: (Math.random() * 50000 + 1000).toFixed(2),
           profitPercentage: (Math.random() * 5 - 2).toFixed(2),
           status: i === 0 ? 'OPEN' : 'CLOSED',
-          closedAt: i === 0 ? null : new Date()
+          closedAt: i === 0 ? null : new Date(),
+          openedAt: new Date(Date.now() - (i * 3600000))
         } as any);
       }
     }
