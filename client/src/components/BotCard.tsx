@@ -2,14 +2,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { type Bot } from "@shared/schema";
-import { Activity, ShieldAlert, Zap, ArrowRight } from "lucide-react";
+import { Activity, Zap, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAllocate } from "@/hooks/use-portfolio";
 import { useToast } from "@/hooks/use-toast";
-import { z } from "zod";
 import { cn } from "@/lib/utils";
 
 interface BotCardProps {
@@ -25,7 +24,7 @@ export function BotCard({ bot }: BotCardProps) {
   const handleAllocate = () => {
     const val = parseFloat(amount);
     if (isNaN(val) || val <= 0) {
-      toast({ title: "Invalid Amount", description: "Please enter a positive number.", variant: "destructive" });
+      toast({ title: "Montant invalide", description: "Veuillez entrer un nombre positif.", variant: "destructive" });
       return;
     }
 
@@ -33,12 +32,12 @@ export function BotCard({ bot }: BotCardProps) {
       { botId: bot.id, amount },
       {
         onSuccess: () => {
-          toast({ title: "Success", description: `Allocated $${amount} to ${bot.name}` });
+          toast({ title: "Succès", description: `Allocation de $${amount} au bot ${bot.name} réussie.` });
           setIsOpen(false);
           setAmount("");
         },
         onError: (err) => {
-          toast({ title: "Failed", description: err.message, variant: "destructive" });
+          toast({ title: "Échec", description: err.message, variant: "destructive" });
         }
       }
     );
@@ -53,12 +52,14 @@ export function BotCard({ bot }: BotCardProps) {
     }
   };
 
+  const isActive = bot.status === "ACTIVE";
+
   return (
     <Card className="bg-zinc-900/40 backdrop-blur-md border-zinc-800/50 hover:border-emerald-500/30 transition-all duration-500 flex flex-col h-full overflow-hidden group shadow-2xl">
       <div className="p-8 flex-1 flex flex-col relative">
         <div className="flex justify-between items-start mb-6">
           <Badge variant="outline" className={cn(getRiskColor(bot.riskLevel), "border-0 font-mono tracking-widest text-[10px] font-black px-2 py-1 uppercase")}>
-            {bot.riskLevel} RISK
+            RISQUE {bot.riskLevel === 'LOW' ? 'FAIBLE' : bot.riskLevel === 'MEDIUM' ? 'MOYEN' : 'ÉLEVÉ'}
           </Badge>
           <div className="flex items-center text-emerald-400 text-xs font-mono font-black tracking-tighter">
             <Zap className="w-3.5 h-3.5 mr-1.5 fill-emerald-400/20" />
@@ -66,21 +67,21 @@ export function BotCard({ bot }: BotCardProps) {
           </div>
         </div>
 
-        <h3 className="text-2xl font-black text-white mb-3 tracking-tighter group-hover:text-emerald-400 transition-colors">{bot.name}</h3>
-        <p className="text-zinc-500 text-sm leading-relaxed mb-8 flex-1 font-medium">
-          {bot.description}
+        <h3 className="text-2xl font-black text-white mb-3 tracking-tighter group-hover:text-emerald-400 transition-colors uppercase">{bot.name}</h3>
+        <p className="text-zinc-500 text-sm leading-relaxed mb-8 flex-1 font-medium italic">
+          "{bot.description}"
         </p>
 
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="p-4 bg-zinc-950/30 rounded-2xl border border-white/5 group-hover:bg-zinc-950/50 transition-colors">
             <div className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Type</div>
-            <div className="text-sm font-bold text-zinc-300">{bot.type}</div>
+            <div className="text-sm font-bold text-zinc-300 uppercase">{bot.type}</div>
           </div>
           <div className="p-4 bg-zinc-950/30 rounded-2xl border border-white/5 group-hover:bg-zinc-950/50 transition-colors">
             <div className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Status</div>
-            <div className="text-sm font-bold text-emerald-500 flex items-center">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
-              {bot.status}
+            <div className={cn("text-sm font-bold flex items-center uppercase", isActive ? "text-emerald-500" : "text-rose-500")}>
+              <span className={cn("w-2 h-2 rounded-full mr-2 shadow-[0_0_10px_rgba(16,185,129,0.5)]", isActive ? "bg-emerald-500 animate-pulse" : "bg-rose-500")} />
+              {isActive ? "OPÉRATIONNEL" : "INACTIF"}
             </div>
           </div>
         </div>
