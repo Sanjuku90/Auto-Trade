@@ -104,12 +104,13 @@ export async function registerRoutes(
       }
 
       // Create PENDING transaction - admin must approve
+      const networkLabel = input.network === "USDT_TRC20" ? "USDT (TRC20)" : "TRON (TRX)";
       const tx = await storage.createTransaction({
         userId,
         type: "WITHDRAWAL",
         amount: input.amount,
         status: "PENDING",
-        description: "Withdrawal request - awaiting admin approval",
+        description: `Withdrawal via ${networkLabel} to ${input.walletAddress}`,
       });
 
       res.status(201).json(tx);

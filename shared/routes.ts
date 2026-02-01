@@ -103,6 +103,8 @@ export const api = {
       path: '/api/withdraw',
       input: z.object({
         amount: z.string(),
+        network: z.enum(["USDT_TRC20", "TRON_TRX"]),
+        walletAddress: z.string().min(10),
       }),
       responses: {
         201: z.custom<typeof transactions.$inferSelect>(),
@@ -200,3 +202,6 @@ export function buildUrl(path: string, params?: Record<string, string | number>)
 
 // Type helpers
 export type PortfolioResponse = z.infer<typeof api.user.portfolio.responses[200]>;
+export type CreateDepositRequest = z.infer<typeof api.user.deposit.input>;
+export type CreateWithdrawalRequest = z.infer<typeof api.user.withdraw.input>;
+export type CreateAllocationRequest = z.infer<typeof api.user.allocate.input>;

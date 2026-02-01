@@ -8,6 +8,7 @@ import { Wallet, TrendingUp, PiggyBank, Plus, Minus, Copy } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { useDeposit, useWithdraw } from "@/hooks/use-portfolio";
 import { useToast } from "@/hooks/use-toast";
@@ -16,12 +17,13 @@ import { DEPOSIT_ADDRESS } from "@shared/routes";
 function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
   const [isOpen, setIsOpen] = useState(false);
   const [amount, setAmount] = useState("");
+  const [network, setNetwork] = useState<"USDT_TRC20" | "TRON_TRX">("USDT_TRC20");
+  const [walletAddress, setWalletAddress] = useState("");
   const deposit = useDeposit();
   const withdraw = useWithdraw();
   const { toast } = useToast();
   
   const isDeposit = type === "deposit";
-  const mutation = isDeposit ? deposit : withdraw;
 
   const handleSubmit = () => {
     const val = parseFloat(amount);
@@ -29,22 +31,40 @@ function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
       toast({ title: "Invalid Amount", variant: "destructive" });
       return;
     }
-    
-    mutation.mutate(
-      { amount },
-      {
-        onSuccess: () => {
-          toast({ 
-            title: "Success", 
-            description: `${isDeposit ? "Deposit" : "Withdrawal"} request submitted.` 
-          });
-          setIsOpen(false);
-          setAmount("");
-        },
-        onError: (err) => toast({ title: "Failed", description: err.message, variant: "destructive" })
+
+    if (isDeposit) {
+      deposit.mutate(
+        { amount },
+        {
+          onSuccess: () => {
+            toast({ title: "Success", description: "Deposit request submitted." });
+            setIsOpen(false);
+            setAmount("");
+          },
+          onError: (err) => toast({ title: "Failed", description: err.message, variant: "destructive" })
+        }
+      );
+    } else {
+      if (!walletAddress || walletAddress.length < 10) {
+        toast({ title: "Invalid Address", description: "Please enter a valid wallet address", variant: "destructive" });
+        return;
       }
-    );
+      withdraw.mutate(
+        { amount, network, walletAddress },
+        {
+          onSuccess: () => {
+            toast({ title: "Success", description: "Withdrawal request submitted." });
+            setIsOpen(false);
+            setAmount("");
+            setWalletAddress("");
+          },
+          onError: (err) => toast({ title: "Failed", description: err.message, variant: "destructive" })
+        }
+      );
+    }
   };
+  
+  const isPending = isDeposit ? deposit.isPending : withdraw.isPending;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -86,6 +106,34 @@ function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
               <p className="text-xs text-amber-500">After sending, enter the amount below to submit your request for approval.</p>
             </div>
           )}
+          {!isDeposit && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="network">Network</Label>
+                <Select value={network} onValueChange={(v) => setNetwork(v as "USDT_TRC20" | "TRON_TRX")}>
+                  <SelectTrigger className="bg-zinc-950 border-zinc-700" data-testid="select-network">
+                    <SelectValue placeholder="Select network" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                    <SelectItem value="USDT_TRC20">USDT (TRC20)</SelectItem>
+                    <SelectItem value="TRON_TRX">TRON (TRX)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="walletAddress">Wallet Address</Label>
+                <Input 
+                  id="walletAddress" 
+                  type="text" 
+                  value={walletAddress} 
+                  onChange={(e) => setWalletAddress(e.target.value)}
+                  className="bg-zinc-950 border-zinc-700 font-mono"
+                  placeholder="Enter your TRON wallet address"
+                  data-testid="input-wallet-address"
+                />
+              </div>
+            </>
+          )}
           <div className="space-y-2">
             <Label htmlFor="amount">Amount (USD)</Label>
             <Input 
@@ -103,10 +151,10 @@ function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
           <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
           <Button 
             onClick={handleSubmit} 
-            disabled={mutation.isPending}
+            disabled={isPending}
             className="bg-emerald-600 hover:bg-emerald-500"
           >
-            {mutation.isPending ? "Processing..." : "Confirm"}
+            {isPending ? "Processing..." : "Confirm"}
           </Button>
         </div>
       </DialogContent>
