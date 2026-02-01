@@ -88,19 +88,19 @@ export function BotCard({ bot }: BotCardProps) {
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button className="w-full h-14 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-900/20 group-hover:shadow-emerald-500/20 transition-all duration-300 border-0 active:scale-[0.98]">
-              Deploy Bot <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              Déployer Bot <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </DialogTrigger>
           <DialogContent className="bg-zinc-900 border-zinc-800 text-white sm:max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-xl font-black uppercase tracking-tighter">Allocate Capital to {bot.name}</DialogTitle>
+              <DialogTitle className="text-xl font-black uppercase tracking-tighter">Allouer du Capital à {bot.name}</DialogTitle>
             </DialogHeader>
             <div className="py-4 space-y-6">
               <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 text-[10px] font-black uppercase tracking-widest leading-relaxed">
-                "Expected daily return up to {bot.dailyCapPercentage}%. Capital is locked for 24h cycles within the algorithmic execution cluster."
+                "Rendement quotidien attendu jusqu'à {bot.dailyCapPercentage}%. Le capital est verrouillé pour des cycles de 24h au sein du cluster d'exécution algorithmique."
               </div>
               <div className="space-y-3">
-                <Label htmlFor="amount" className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Amount (USD)</Label>
+                <Label htmlFor="amount" className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Montant (USD)</Label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-black">$</span>
                   <Input
@@ -115,13 +115,13 @@ export function BotCard({ bot }: BotCardProps) {
               </div>
             </div>
             <div className="flex justify-end gap-3 pt-2">
-              <Button variant="ghost" onClick={() => setIsOpen(false)} className="rounded-xl font-bold uppercase tracking-widest text-xs h-11 text-zinc-500">Abort</Button>
+              <Button variant="ghost" onClick={() => setIsOpen(false)} className="rounded-xl font-bold uppercase tracking-widest text-xs h-11 text-zinc-500">Abandonner</Button>
               <Button 
                 onClick={handleAllocate} 
                 disabled={isPending}
                 className="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black uppercase tracking-widest text-xs h-11 px-8 shadow-xl shadow-emerald-900/20"
               >
-                {isPending ? "Executing..." : "Confirm Deployment"}
+                {isPending ? "Exécution..." : "Confirmer le Déploiement"}
               </Button>
             </div>
           </DialogContent>

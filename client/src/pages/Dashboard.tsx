@@ -79,34 +79,34 @@ function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
           }
         >
           {isDeposit ? <Plus className="w-4 h-4 mr-2" /> : <Minus className="w-4 h-4 mr-2" />}
-          {isDeposit ? "Deposit" : "Withdraw"}
+          {isDeposit ? "Dépôt" : "Retrait"}
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-zinc-900 border-zinc-800 text-white sm:max-w-md rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-black uppercase tracking-tighter">{isDeposit ? "Initialize Deposit" : "Request Withdrawal"}</DialogTitle>
+          <DialogTitle className="text-xl font-black uppercase tracking-tighter">{isDeposit ? "Initialiser un Dépôt" : "Demander un Retrait"}</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
           {isDeposit && (
-            <div className="space-y-3 p-4 bg-zinc-950 border border-white/5 rounded-2xl">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Target Network: USDT (TRC20)</Label>
-              <div className="flex items-center gap-2 p-3 bg-zinc-900 rounded-xl border border-white/5">
-                <code className="font-mono text-emerald-400 text-xs break-all flex-1">{DEPOSIT_ADDRESS}</code>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-9 w-9 rounded-lg hover:bg-emerald-500/10 hover:text-emerald-400"
-                  onClick={() => {
-                    navigator.clipboard.writeText(DEPOSIT_ADDRESS);
-                    toast({ title: "Copied", description: "Address copied to clipboard" });
-                  }}
-                  data-testid="button-copy-deposit-address"
-                >
-                  <Copy className="w-4 h-4" />
-                </Button>
+              <div className="space-y-3 p-4 bg-zinc-950 border border-white/5 rounded-2xl">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Réseau Cible : USDT (TRC20)</Label>
+                <div className="flex items-center gap-2 p-3 bg-zinc-900 rounded-xl border border-white/5">
+                  <code className="font-mono text-emerald-400 text-xs break-all flex-1">{DEPOSIT_ADDRESS}</code>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-9 w-9 rounded-lg hover:bg-emerald-500/10 hover:text-emerald-400"
+                    onClick={() => {
+                      navigator.clipboard.writeText(DEPOSIT_ADDRESS);
+                      toast({ title: "Copié", description: "Adresse copiée dans le presse-papiers" });
+                    }}
+                    data-testid="button-copy-deposit-address"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                </div>
+                <p className="text-[10px] font-bold text-amber-500/80 leading-relaxed">Vérification Système : Les actifs seront crédités après confirmation du réseau.</p>
               </div>
-              <p className="text-[10px] font-bold text-amber-500/80 leading-relaxed">System Verification: Assets will be credited upon network confirmation.</p>
-            </div>
           )}
           {!isDeposit && (
             <>
@@ -174,10 +174,10 @@ export default function Dashboard() {
       <main className="flex-1 lg:ml-64 p-6 lg:p-12 overflow-y-auto">
         <header className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-6">
           <div>
-            <h1 className="text-5xl font-black text-white mb-2 tracking-tighter uppercase">TERMINAL OVERVIEW</h1>
+            <h1 className="text-5xl font-black text-white mb-2 tracking-tighter uppercase">APERÇU DU TERMINAL</h1>
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
-              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">NETWORK STATUS: OPTIMAL PERFORMANCE</p>
+              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">STATUT RÉSEAU : PERFORMANCE OPTIMALE</p>
             </div>
           </div>
           <div className="flex gap-4">
@@ -189,27 +189,27 @@ export default function Dashboard() {
         {/* Summary Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           <StatCard 
-            label="Total Valuation" 
+            label="Évaluation Totale" 
             value={`$${parseFloat(data?.totalBalance || "0").toLocaleString(undefined, {minimumFractionDigits: 2})}`}
             trend="up"
             trendValue="+12.4%"
             icon={<Wallet className="w-5 h-5" />}
           />
           <StatCard 
-            label="Daily Performance" 
+            label="Performance du Jour" 
             value="+2.4%"
             trend="up"
             trendValue="+0.8%"
             icon={<Zap className="w-5 h-5" />}
           />
           <StatCard 
-            label="Active Nodes" 
+            label="Nœuds Actifs" 
             value={data?.allocations.length.toString() || '0'}
-            subValue="Running 24/7"
+            subValue="Opérationnel 24/7"
             icon={<ShieldAlert className="w-5 h-5" />}
           />
           <StatCard 
-            label="Total Profit" 
+            label="Profit Total" 
             value={`$${parseFloat(data?.totalProfit || "0").toLocaleString(undefined, {minimumFractionDigits: 2})}`}
             trend="up"
             trendValue="+12.5%" 
@@ -225,11 +225,11 @@ export default function Dashboard() {
           <div className="lg:col-span-1">
              <div className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/50 rounded-3xl p-8 h-full shadow-2xl group hover:border-emerald-500/20 transition-all duration-500">
                 <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-6">Network Insight</div>
-                <h3 className="text-2xl font-black text-white mb-4 tracking-tighter">NODE STATUS</h3>
+                <h3 className="text-2xl font-black text-white mb-4 tracking-tighter">STATUT DES NŒUDS</h3>
                 <div className="space-y-6">
-                  <p className="text-zinc-500 text-sm font-medium leading-relaxed italic">"Global trading infrastructure reporting 99.9% uptime. Latency stabilized across all execution clusters."</p>
+                  <p className="text-zinc-500 text-sm font-medium leading-relaxed italic">"Infrastructure de trading mondiale signalant une disponibilité de 99,9 %. Latence stabilisée sur tous les clusters d'exécution."</p>
                   <Button variant="outline" className="w-full h-12 rounded-xl border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-white font-black uppercase tracking-widest text-xs transition-all" asChild>
-                    <a href="/bots">View Bot Market</a>
+                    <a href="/bots">Voir le Marché des Bots</a>
                   </Button>
                 </div>
              </div>
@@ -239,10 +239,10 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           <div className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/50 rounded-3xl p-8 shadow-2xl">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-black text-white uppercase tracking-tighter">Live Node Positions</h3>
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter">Positions des Nœuds en Direct</h3>
               <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Real-time</span>
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Temps réel</span>
               </div>
             </div>
             <PositionList />
@@ -250,9 +250,9 @@ export default function Dashboard() {
 
           <div className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/50 rounded-3xl p-8 shadow-2xl">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-black text-white uppercase tracking-tighter">Network Ledger</h3>
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter">Grand Livre du Réseau</h3>
               <Button variant="ghost" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white" asChild>
-                <a href="/transactions">View All</a>
+                <a href="/transactions">Tout voir</a>
               </Button>
             </div>
             <TransactionTable transactions={data?.recentTransactions || []} limit={6} />

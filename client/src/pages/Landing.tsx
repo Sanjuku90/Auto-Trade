@@ -61,24 +61,24 @@ export default function Landing() {
           </div>
           
           <h1 className="text-6xl md:text-[110px] font-black tracking-[calc(-0.06em)] leading-[0.85] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 uppercase text-white">
-            QUANTITATIVE <br />
+            AUTONOMIE <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-500 to-cyan-500">
-              AUTONOMY
+              QUANTITATIVE
             </span>
           </h1>
           
           <p className="text-xl md:text-2xl text-zinc-500 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 font-medium italic">
-            "Institutional-grade algorithmic trading strategies, accessible through a streamlined terminal interface. Absolute transparency in every execution."
+            "Des stratégies de trading algorithmique de niveau institutionnel, accessibles via une interface terminale simplifiée. Une transparence absolue dans chaque exécution."
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
             <a href="/api/login">
               <Button size="lg" className="bg-emerald-600 hover:bg-emerald-500 text-white h-16 px-12 text-xs font-black uppercase tracking-[0.2em] rounded-2xl shadow-2xl shadow-emerald-900/40 active:scale-95 transition-all border-0">
-                Initialize Account
+                Initialiser le Compte
               </Button>
             </a>
             <Button variant="outline" size="lg" className="border-zinc-800 hover:bg-zinc-900 text-white h-16 px-12 text-xs font-black uppercase tracking-[0.2em] rounded-2xl active:scale-95 transition-all">
-              Verify Track Record
+              Vérifier les Performances
             </Button>
           </div>
         </div>
@@ -86,9 +86,9 @@ export default function Landing() {
         {/* Stats Grid */}
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-40">
           {[
-            { label: "Network Volume", value: "$4.2M+", detail: "Trailing 30 Days" },
-            { label: "Target Return", value: "16.8%", detail: "Avg. Monthly Performance", highlight: true },
-            { label: "Core Uptime", value: "99.9%", detail: "High-Availability Clusters" }
+            { label: "Volume du Réseau", value: "$4.2M+", detail: "Derniers 30 Jours" },
+            { label: "Objectif de Rendement", value: "16.8%", detail: "Performance Mensuelle Moyenne", highlight: true },
+            { label: "Disponibilité du Cœur", value: "99.9%", detail: "Clusters Haute Disponibilité" }
           ].map((stat, i) => (
             <div key={i} className="p-10 rounded-[2.5rem] bg-zinc-900/30 border border-white/5 backdrop-blur-md group hover:border-emerald-500/20 transition-all duration-700 shadow-2xl">
               <div className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-6 group-hover:text-emerald-500/50 transition-colors">{stat.label}</div>
@@ -107,18 +107,18 @@ export default function Landing() {
             {[
               { 
                 icon: Cpu, 
-                title: "ALGORITHMIC PRECISION", 
-                desc: "Zero emotional interference. Mathematical probability models executed across global exchanges with sub-millisecond precision." 
+                title: "PRÉCISION ALGORITHMIQUE", 
+                desc: "Zéro interférence émotionnelle. Des modèles de probabilité mathématique exécutés sur les bourses mondiales avec une précision à la sous-milliseconde." 
               },
               { 
                 icon: ShieldCheck, 
-                title: "RISK ENFORCEMENT", 
-                desc: "Mandatory stop-loss protocols and automated profit caps (16-18%) prioritize capital preservation in all market regimes." 
+                title: "APPLICATION DU RISQUE", 
+                desc: "Les protocoles de stop-loss obligatoires et les plafonds de profit automatisés (16-18%) priorisent la préservation du capital dans tous les régimes de marché." 
               },
               { 
                 icon: LineChart, 
-                title: "IMMUTABLE LEDGER", 
-                desc: "Real-time auditing of every execution. Transparent performance metrics and comprehensive transaction history." 
+                title: "REGISTRE IMMUABLE", 
+                desc: "Audit en temps réel de chaque exécution. Mesures de performance transparentes et historique complet des transactions." 
               }
             ].map((f, i) => (
               <div key={i} className="p-10 rounded-[2.5rem] bg-zinc-900/20 border border-white/5 hover:border-emerald-500/30 transition-all duration-500 group shadow-xl">
@@ -147,17 +147,17 @@ export default function Landing() {
           </div>
           
           <div className="flex flex-wrap justify-center gap-10 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">
-            <a href="#" className="hover:text-emerald-400 transition-colors">Privacy Protocols</a>
-            <a href="#" className="hover:text-emerald-400 transition-colors">Operating Terms</a>
-            <a href="#" className="hover:text-emerald-400 transition-colors">Risk Governance</a>
+            <a href="#" className="hover:text-emerald-400 transition-colors">Protocoles de Confidentialité</a>
+            <a href="#" className="hover:text-emerald-400 transition-colors">Conditions d'Utilisation</a>
+            <a href="#" className="hover:text-emerald-400 transition-colors">Gouvernance des Risques</a>
           </div>
 
           <p className="max-w-3xl text-[10px] text-zinc-700 font-bold uppercase tracking-widest leading-loose opacity-60 italic">
-            "Trading in financial markets involves high-risk variables. System performance is measured by probability models. Capital preservation is the core objective but cannot be guaranteed in extreme market turbulence."
+            "Le trading sur les marchés financiers comporte des variables à haut risque. La performance du système est mesurée par des modèles de probabilité. La préservation du capital est l'objectif principal mais ne peut être garantie en cas de turbulence extrême du marché."
           </p>
 
           <div className="text-[10px] font-black text-zinc-800 uppercase tracking-widest mt-8">
-            © 2026 AUTOTRADE CORE. ALL SYSTEMS OPERATIONAL.
+            © 2026 AUTOTRADE CORE. TOUS LES SYSTÈMES SONT OPÉRATIONNELS.
           </div>
         </div>
       </footer>

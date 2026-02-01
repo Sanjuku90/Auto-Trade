@@ -39,7 +39,7 @@ export function Navigation() {
               )}
             >
               <LayoutDashboard className="w-5 h-5" />
-              OVERVIEW
+              TABLEAU DE BORD
             </Button>
           </Link>
           <Link href="/bots">
@@ -51,7 +51,7 @@ export function Navigation() {
               )}
             >
               <Bot className="w-5 h-5" />
-              BOT MARKET
+              MARCHÉ DES BOTS
             </Button>
           </Link>
           <Link href="/transactions">
@@ -63,7 +63,7 @@ export function Navigation() {
               )}
             >
               <ArrowRightLeft className="w-5 h-5" />
-              HISTORY
+              HISTORIQUE
             </Button>
           </Link>
         </div>

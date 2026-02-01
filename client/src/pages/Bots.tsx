@@ -13,9 +13,9 @@ export default function Bots() {
       <main className="flex-1 lg:ml-64 p-6 lg:p-12 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
           <header className="mb-16">
-            <h1 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase">BOT INFRASTRUCTURE</h1>
+            <h1 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase">INFRASTRUCTURE DES BOTS</h1>
             <p className="text-zinc-500 max-w-2xl text-lg font-medium italic">
-              "Deploy specialized algorithmic nodes designed for distinct market regimes. Each bot operates within strict risk boundaries."
+              "Déployez des nœuds algorithmiques spécialisés conçus pour différents régimes de marché. Chaque bot opère dans des limites de risque strictes."
             </p>
           </header>
 
