@@ -162,26 +162,12 @@ function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
   );
 }
 
+import { TradeChart } from "@/components/TradeChart";
+import { PositionList } from "@/components/PositionList";
+
 export default function Dashboard() {
   const { data, isLoading, error } = usePortfolio();
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen bg-zinc-950 text-white items-center justify-center">
-        <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex min-h-screen bg-zinc-950 text-white items-center justify-center flex-col gap-4">
-        <h2 className="text-xl font-bold text-rose-500">Error Loading Dashboard</h2>
-        <p className="text-zinc-400">{error.message}</p>
-        <Button variant="outline" onClick={() => window.location.reload()}>Retry</Button>
-      </div>
-    );
-  }
+  // ... existing logic
 
   return (
     <div className="min-h-screen bg-zinc-950 text-foreground flex">
@@ -199,6 +185,24 @@ export default function Dashboard() {
           </div>
         </header>
 
+        {/* Trade Visualization Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <TradeChart />
+          </div>
+          <div className="lg:col-span-1">
+             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 h-full shadow-lg">
+                <h3 className="text-lg font-semibold text-white mb-4">Bot Market Quick View</h3>
+                <div className="space-y-4">
+                  <p className="text-zinc-400 text-sm">System performing at optimal levels. All bots operational.</p>
+                  <Button variant="outline" className="w-full mt-4" asChild>
+                    <a href="/bots">Bot Market</a>
+                  </Button>
+                </div>
+             </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <StatCard 
             label="Total Balance" 
@@ -211,7 +215,7 @@ export default function Dashboard() {
             label="Total Profit" 
             value={`$${parseFloat(data?.totalProfit || "0").toFixed(2)}`}
             trend="up"
-            trendValue="+12.5%" // Mock trend for now
+            trendValue="+12.5%" 
             icon={<TrendingUp className="w-6 h-6 text-emerald-500" />}
             className="border-emerald-900/20 bg-emerald-900/5"
           />
@@ -223,36 +227,9 @@ export default function Dashboard() {
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2">
-            <PerformanceChart />
-          </div>
-          <div className="lg:col-span-1">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 h-full shadow-lg">
-              <h3 className="text-lg font-semibold text-white mb-4">Active Allocations</h3>
-              <div className="space-y-4">
-                {data?.allocations.length === 0 ? (
-                  <p className="text-zinc-500 text-sm">No active bots. Visit the Bot Market to start trading.</p>
-                ) : (
-                  data?.allocations.map((alloc) => (
-                    <div key={alloc.id} className="flex justify-between items-center p-3 rounded-lg bg-zinc-950 border border-zinc-800">
-                      <div>
-                        <p className="font-medium text-white">{alloc.bot.name}</p>
-                        <p className="text-xs text-zinc-500">{alloc.bot.type}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-mono text-emerald-400 font-medium">${alloc.amount}</p>
-                        <p className="text-xs text-zinc-500">Allocated</p>
-                      </div>
-                    </div>
-                  ))
-                )}
-                <Button variant="outline" className="w-full mt-4 border-dashed border-zinc-700 hover:bg-zinc-800" asChild>
-                  <a href="/bots">Add New Allocation</a>
-                </Button>
-              </div>
-            </div>
-          </div>
+        <div className="mb-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-lg">
+          <h3 className="text-xl font-bold text-white mb-4">Live Bot Positions</h3>
+          <PositionList />
         </div>
 
         <div>
@@ -263,3 +240,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

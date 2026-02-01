@@ -8,7 +8,9 @@ import {
   allocations,
   transactions,
   dailyPerformances,
-  wallets
+  wallets,
+  positions,
+  type Position
 } from './schema';
 
 // ============================================
@@ -84,6 +86,16 @@ export const api = {
         201: z.custom<typeof allocations.$inferSelect>(),
         400: errorSchemas.validation,
         401: errorSchemas.unauthorized,
+      },
+    },
+    positions: {
+      list: {
+        method: 'GET' as const,
+        path: '/api/positions',
+        responses: {
+          200: z.array(z.custom<Position>()),
+          401: errorSchemas.unauthorized,
+        },
       },
     },
     deposit: {

@@ -1,10 +1,10 @@
 import { 
-  users, bots, allocations, dailyPerformances, transactions, wallets,
+  users, bots, allocations, dailyPerformances, transactions, wallets, positions,
   type User, type UpsertUser, type Bot, type InsertBot, 
   type Allocation, type InsertAllocation, 
   type DailyPerformance, type InsertDailyPerformance,
   type Transaction, type InsertTransaction,
-  type Wallet
+  type Wallet, type Position, type InsertPosition
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
@@ -37,6 +37,11 @@ export interface IStorage extends IAuthStorage {
   
   // Daily Stats
   createDailyPerformance(stats: InsertDailyPerformance): Promise<DailyPerformance>;
+
+  // Positions
+  getPositions(botId?: number): Promise<Position[]>;
+  createPosition(position: InsertPosition): Promise<Position>;
+  updatePosition(id: number, position: Partial<Position>): Promise<Position>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -184,6 +189,27 @@ export class DatabaseStorage implements IStorage {
   async createDailyPerformance(stats: InsertDailyPerformance): Promise<DailyPerformance> {
     const [newStats] = await db.insert(dailyPerformances).values(stats).returning();
     return newStats;
+  }
+
+  // Positions
+  async getPositions(botId?: number): Promise<Position[]> {
+    if (botId) {
+      return await db.select().from(positions).where(eq(positions.botId, botId)).orderBy(desc(positions.openedAt));
+    }
+    return await db.select().from(positions).orderBy(desc(positions.openedAt));
+  }
+
+  async createPosition(position: InsertPosition): Promise<Position> {
+    const [newPos] = await db.insert(positions).values(position).returning();
+    return newPos;
+  }
+
+  async updatePosition(id: number, position: Partial<Position>): Promise<Position> {
+    const [updated] = await db.update(positions)
+      .set(position)
+      .where(eq(positions.id, id))
+      .returning();
+    return updated;
   }
 }
 

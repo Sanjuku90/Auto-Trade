@@ -30,6 +30,20 @@ export const bots = pgTable("bots", {
   imageUrl: text("image_url"),
 });
 
+// Bot trade positions
+export const positions = pgTable("positions", {
+  id: serial("id").primaryKey(),
+  botId: integer("bot_id").notNull().references(() => bots.id),
+  asset: text("asset").notNull(), // e.g., 'BTC/USDT'
+  type: text("type").notNull(), // 'BUY', 'SELL'
+  entryPrice: numeric("entry_price").notNull(),
+  exitPrice: numeric("exit_price"),
+  profitPercentage: numeric("profit_percentage"),
+  status: text("status").notNull().default("OPEN"), // 'OPEN', 'CLOSED'
+  openedAt: timestamp("opened_at").defaultNow(),
+  closedAt: timestamp("closed_at"),
+});
+
 // User allocations to bots
 export const allocations = pgTable("allocations", {
   id: serial("id").primaryKey(),
@@ -95,6 +109,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
 
 // === ZOD SCHEMAS ===
 export const insertBotSchema = createInsertSchema(bots).omit({ id: true });
+export const insertPositionSchema = createInsertSchema(positions).omit({ id: true, openedAt: true });
 export const insertAllocationSchema = createInsertSchema(allocations).omit({ id: true, createdAt: true, active: true });
 export const insertTransactionSchema = createInsertSchema(transactions).omit({ id: true, createdAt: true });
 export const insertDailyPerformanceSchema = createInsertSchema(dailyPerformances).omit({ id: true, createdAt: true });
@@ -102,6 +117,9 @@ export const insertDailyPerformanceSchema = createInsertSchema(dailyPerformances
 // === EXPLICIT API TYPES ===
 export type Bot = typeof bots.$inferSelect;
 export type InsertBot = z.infer<typeof insertBotSchema>;
+
+export type Position = typeof positions.$inferSelect;
+export type InsertPosition = z.infer<typeof insertPositionSchema>;
 
 export type Allocation = typeof allocations.$inferSelect;
 export type InsertAllocation = z.infer<typeof insertAllocationSchema>;
