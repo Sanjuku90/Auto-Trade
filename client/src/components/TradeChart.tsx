@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { createChart, ColorType, CandlestickSeries } from 'lightweight-charts';
+import { createChart, ColorType, CandlestickSeries, createSeriesMarkers } from 'lightweight-charts';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@shared/routes';
 import { Card } from '@/components/ui/card';
@@ -9,6 +9,7 @@ export function TradeChart() {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<any>(null);
   const seriesRef = useRef<any>(null);
+  const markersRef = useRef<any>(null);
 
   const { data: ohlcData } = useQuery({
     queryKey: [api.user.market.ohlc.path],
@@ -51,6 +52,9 @@ export function TradeChart() {
       wickDownColor: '#ef4444',
     });
 
+    const markersPlugin = createSeriesMarkers(candlestickSeries);
+    markersRef.current = markersPlugin;
+
     seriesRef.current = candlestickSeries;
     chartRef.current = chart;
 
@@ -80,7 +84,10 @@ export function TradeChart() {
             shape: p.type === 'BUY' ? 'arrowUp' : 'arrowDown',
             text: `BOT ${p.type}`,
           }));
-        seriesRef.current.setMarkers(markers);
+        
+        if (markersRef.current) {
+          markersRef.current.setMarkers(markers);
+        }
       }
     }
   }, [ohlcData, positions]);
