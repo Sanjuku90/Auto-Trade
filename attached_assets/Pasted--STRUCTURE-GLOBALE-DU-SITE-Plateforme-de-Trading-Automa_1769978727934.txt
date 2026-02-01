@@ -1,0 +1,260 @@
+
+🧱 STRUCTURE GLOBALE DU SITE
+
+Plateforme de Trading Automatisé par Bots
+
+⸻
+
+🌐 1. PAGES PUBLIQUES (AVANT CONNEXION)
+
+🏠 Page d’Accueil (Home)
+
+Objectif
+
+Convaincre en 30 secondes sans promettre l’impossible.
+
+Sections
+	1.	Hero Section
+	•	Slogan clair (ex : Trading automatisé, risque contrôlé)
+	•	Bouton : Commencer
+	•	Mention discrète : Rendements variables – non garantis
+	2.	Comment ça fonctionne
+	•	Dépôt
+	•	Allocation bots
+	•	Trading automatique
+	•	Retrait
+	3.	Notre technologie
+	•	Multi-bots
+	•	Gestion du risque
+	•	Plafond de profit journalier (16–18% max)
+	4.	Pourquoi nous
+	•	Discipline algorithmique
+	•	Réserve de stabilisation
+	•	Transparence
+	5.	Statistiques globales (agrégées)
+	•	% jours positifs
+	•	Capital sous gestion
+	•	Trades exécutés
+	6.	Call To Action
+	•	Créer un compte
+	•	Découvrir la plateforme
+
+⸻
+
+📘 Page “Comment ça marche”
+
+Objectif
+
+Pédagogie + réassurance.
+
+Contenu
+	•	Fonctionnement des bots
+	•	Répartition du capital
+	•	Logique du plafond journalier
+	•	Gestion du risque
+	•	Cas pratique (ex : dépôt 100$)
+
+⸻
+
+🤖 Page “Nos Bots”
+
+Objectif
+
+Montrer que ce n’est pas un bot magique.
+
+Sections
+	•	Bot Scalping
+	•	Bot Trend
+	•	Bot Range
+	•	Bot Événementiel
+	•	Bot Sentinelle (sécurité)
+
+➡️ Rôle, fréquence, niveau de risque (sans code).
+
+⸻
+
+📊 Page “Performances”
+
+Objectif
+
+Crédibilité.
+
+Contenu
+	•	Performances globales (pas individuelles)
+	•	Graphiques mensuels
+	•	% jours gagnants / neutres / perdants
+	•	Avertissement sur la variabilité
+
+⸻
+
+💼 Page “Comptes & Accès”
+
+Objectif
+
+Clarifier sans vendre du rêve.
+
+Contenu
+
+Compte	Plafond journalier	Bots	Retrait
+Standard	12–14%	Basique	Normal
+Advanced	16–18%	Avancés	Prioritaire
+Pro	16–18%	Événementiels	Accéléré
+
+
+⸻
+
+❓ FAQ
+
+Questions clés
+	•	Les gains sont-ils garantis ?
+	•	Pourquoi un plafond de profit ?
+	•	Puis-je perdre de l’argent ?
+	•	Comment fonctionne le retrait ?
+	•	Les bots peuvent-ils être arrêtés ?
+
+⸻
+
+🧾 Page “Risques & Transparence”
+
+Objectif
+
+Très important pour la légitimité.
+
+Contenu
+	•	Risques du trading
+	•	Volatilité
+	•	Scénarios négatifs
+	•	Responsabilité utilisateur
+	•	Rôle de la réserve de stabilisation
+
+⸻
+
+📄 Pages légales
+	•	Conditions d’utilisation
+	•	Politique de confidentialité
+	•	Disclaimer financier
+
+⸻
+
+🔐 2. PAGES D’AUTHENTIFICATION
+
+🔑 Connexion
+	•	Email + mot de passe
+	•	Sécurité (2FA plus tard)
+
+✍️ Inscription
+	•	Email
+	•	Mot de passe
+	•	Validation
+
+⸻
+
+👤 3. ESPACE UTILISATEUR (DASHBOARD)
+
+📊 Dashboard Principal
+
+Éléments clés
+	•	Solde total
+	•	Capital investi
+	•	Profit du jour (progressif)
+	•	Barre plafond journalier
+	•	Bots actifs aujourd’hui
+	•	Niveau de risque
+
+⸻
+
+💰 Page Dépôt
+	•	Choix du montant
+	•	Méthodes de paiement
+	•	Confirmation
+	•	Placement automatique
+
+⸻
+
+💸 Page Retrait
+	•	Retrait profits / capital
+	•	Historique
+	•	Délais clairs
+
+⸻
+
+📈 Page Performances Personnelles
+	•	Historique journalier
+	•	Graphiques
+	•	Gains cumulés
+	•	Jours négatifs
+
+⸻
+
+🤖 Page “Bots Actifs”
+	•	Bots utilisés
+	•	Allocation actuelle
+	•	Statut (actif / pause)
+
+⸻
+
+🔔 Notifications
+	•	Trades importants
+	•	Atteinte plafond journalier
+	•	Pause de bots
+	•	Retrait validé
+
+⸻
+
+⚙️ Paramètres
+	•	Profil
+	•	Sécurité
+	•	Méthodes de paiement
+	•	Préférences notifications
+
+⸻
+
+🛠️ 4. ESPACE ADMIN (INTERNE)
+
+(non visible publiquement)
+
+🔧 Admin Dashboard
+	•	Capital sous gestion
+	•	Performance globale
+	•	Réserve de stabilisation
+	•	Bots actifs
+
+🤖 Gestion des Bots
+	•	Activation / pause
+	•	Paramètres de risque
+	•	Logs
+
+👥 Utilisateurs
+	•	Comptes
+	•	Dépôts / retraits
+	•	Statuts
+
+🛡️ Sécurité
+	•	Alertes
+	•	Anomalies
+	•	Historique incidents
+
+⸻
+
+🧩 LOGIQUE UX IMPORTANTE
+
+✔️ Gains affichés progressivement
+✔️ Aucun chiffre figé
+✔️ Langage technique, pas marketing agressif
+✔️ Rappels discrets des risques
+
+⸻
+
+🎯 STRUCTURE FINALE (RÉSUMÉ)
+
+Public
+Accueil → Comment ça marche → Bots → Performances → Comptes → FAQ
+
+Utilisateur
+Dashboard → Dépôt → Retrait → Performances → Bots → Paramètres
+
+Admin
+Contrôle → Bots → Utilisateurs → Sécurité
+
+⸻
+
