@@ -77,13 +77,13 @@ export function TradeChart() {
         const markers = positions
           .filter(p => p.status === 'OPEN' || p.status === 'CLOSED')
           .map(p => ({
-            time: Math.floor(new Date(p.createdAt || Date.now()).getTime() / 1000) as any,
+            time: Math.floor(new Date(p.openedAt || Date.now()).getTime() / 1000) as any,
             position: p.type === 'BUY' ? 'belowBar' : 'aboveBar' as any,
             color: p.type === 'BUY' ? '#10b981' : '#ef4444',
             shape: p.type === 'BUY' ? 'arrowUp' : 'arrowDown' as any,
             text: `BOT ${p.type}`,
           }));
-        seriesRef.current.setMarkers(markers);
+        (seriesRef.current as any).setMarkers(markers);
       }
     }
   }, [ohlcData, positions]);
