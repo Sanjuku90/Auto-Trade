@@ -124,6 +124,21 @@ export const api = {
         401: errorSchemas.unauthorized,
       },
     },
+    market: {
+      ohlc: {
+        method: 'GET' as const,
+        path: '/api/market/ohlc',
+        responses: {
+          200: z.array(z.object({
+            time: z.number(),
+            open: z.number(),
+            high: z.number(),
+            low: z.number(),
+            close: z.number(),
+          })),
+        },
+      },
+    },
   },
 
   // Admin Endpoints

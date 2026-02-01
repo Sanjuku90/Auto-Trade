@@ -1,74 +1,109 @@
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  AreaChart,
-  Area
-} from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const mockData = [
-  { time: '00:00', price: 42000 },
-  { time: '04:00', price: 42500 },
-  { time: '08:00', price: 42300 },
-  { time: '12:00', price: 43000 },
-  { time: '16:00', price: 42800 },
-  { time: '20:00', price: 43500 },
-  { time: '23:59', price: 43200 },
-];
+import { useEffect, useRef } from 'react';
+import { createChart, ColorType, ISeriesApi, CandlestickData } from 'lightweight-charts';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@shared/routes';
+import { Card } from '@/components/ui/card';
+import { usePositions } from '@/hooks/use-positions';
 
 export function TradeChart() {
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<any>(null);
+  const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+
+  const { data: ohlcData } = useQuery({
+    queryKey: [api.user.market.ohlc.path],
+    queryFn: async () => {
+      const res = await fetch(api.user.market.ohlc.path);
+      if (!res.ok) throw new Error("Failed to fetch OHLC");
+      return res.json();
+    },
+    refetchInterval: 10000,
+  });
+
+  const { data: positions } = usePositions();
+
+  useEffect(() => {
+    if (!chartContainerRef.current) return;
+
+    const chart = createChart(chartContainerRef.current, {
+      layout: {
+        background: { type: ColorType.Solid, color: 'transparent' },
+        textColor: '#a1a1aa',
+      },
+      grid: {
+        vertLines: { color: 'rgba(39, 39, 42, 0.3)' },
+        horzLines: { color: 'rgba(39, 39, 42, 0.3)' },
+      },
+      width: chartContainerRef.current.clientWidth,
+      height: 400,
+      timeScale: {
+        borderColor: 'rgba(39, 39, 42, 0.5)',
+        timeVisible: true,
+        secondsVisible: false,
+      },
+      rightPriceScale: {
+        borderColor: 'rgba(39, 39, 42, 0.5)',
+      },
+    });
+
+    const candlestickSeries = chart.addCandlestickSeries({
+      upColor: '#10b981',
+      downColor: '#ef4444',
+      borderVisible: false,
+      wickUpColor: '#10b981',
+      wickDownColor: '#ef4444',
+    });
+
+    seriesRef.current = candlestickSeries;
+    chartRef.current = chart;
+
+    const handleResize = () => {
+      chart.applyOptions({ width: chartContainerRef.current?.clientWidth });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      chart.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (seriesRef.current && ohlcData) {
+      seriesRef.current.setData(ohlcData);
+
+      if (positions) {
+        const markers = positions
+          .filter(p => p.status === 'OPEN' || p.status === 'CLOSED')
+          .map(p => ({
+            time: Math.floor(new Date(p.createdAt || Date.now()).getTime() / 1000) as any,
+            position: p.type === 'BUY' ? 'belowBar' : 'aboveBar' as any,
+            color: p.type === 'BUY' ? '#10b981' : '#ef4444',
+            shape: p.type === 'BUY' ? 'arrowUp' : 'arrowDown' as any,
+            text: `BOT ${p.type}`,
+          }));
+        seriesRef.current.setMarkers(markers);
+      }
+    }
+  }, [ohlcData, positions]);
+
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
-      <CardHeader>
-        <CardTitle className="text-white text-lg font-medium">BTC/USDT Real-time</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[300px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={mockData}>
-              <defs>
-                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-              <XAxis 
-                dataKey="time" 
-                stroke="#71717a" 
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis 
-                stroke="#71717a" 
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `$${value}`}
-                domain={['auto', 'auto']}
-              />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px' }}
-                itemStyle={{ color: '#10b981' }}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="price" 
-                stroke="#10b981" 
-                fillOpacity={1} 
-                fill="url(#colorPrice)" 
-                strokeWidth={2}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+    <Card className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/50 rounded-3xl p-6 shadow-2xl group overflow-hidden">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Market Execution Cluster</div>
+          <h3 className="text-2xl font-black text-white tracking-tighter uppercase">BTC/USDT REAL-TIME</h3>
         </div>
-      </CardContent>
+        <div className="flex gap-2">
+          {['1m', '5m', '15m', '1h'].map(tf => (
+            <button key={tf} className="px-3 py-1 rounded-lg bg-zinc-950 border border-white/5 text-[10px] font-black text-zinc-500 hover:text-emerald-400 hover:border-emerald-500/30 transition-all uppercase">
+              {tf}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div ref={chartContainerRef} className="w-full h-[400px]" />
     </Card>
   );
 }

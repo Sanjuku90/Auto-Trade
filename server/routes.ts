@@ -170,6 +170,35 @@ export async function registerRoutes(
     }
   });
 
+  app.get(api.user.market.ohlc.path, requireAuth, async (req, res) => {
+    const { asset = "BTCUSDT", tf = "1m" } = req.query;
+    
+    // Simulate OHLC data for MVP
+    const data = [];
+    let currentTime = Math.floor(Date.now() / 1000) - (100 * 60);
+    let lastClose = 42000;
+    
+    for (let i = 0; i < 100; i++) {
+      const open = lastClose;
+      const high = open + (Math.random() * 50);
+      const low = open - (Math.random() * 50);
+      const close = low + (Math.random() * (high - low));
+      
+      data.push({
+        time: currentTime,
+        open,
+        high,
+        low,
+        close
+      });
+      
+      currentTime += 60;
+      lastClose = close;
+    }
+    
+    res.json(data);
+  });
+
   app.get(api.user.positions.list.path, requireAuth, async (req, res) => {
     const botId = req.query.botId ? Number(req.query.botId) : undefined;
     const positions = await storage.getPositions(botId);
