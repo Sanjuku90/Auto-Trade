@@ -149,7 +149,6 @@ export async function registerRoutes(
         userId,
         botId,
         amount: input.amount,
-        status: "ACTIVE",
       });
 
       // Create a ledger entry for the allocation
@@ -171,17 +170,36 @@ export async function registerRoutes(
   });
 
   app.get(api.user.market.ohlc.path, requireAuth, async (req, res) => {
-    const { asset = "BTCUSDT", tf = "1m" } = req.query;
+    const asset = req.query.asset as string || "BTCUSDT";
+    const tf = req.query.tf as string || "1m";
     
-    // Simulate OHLC data for MVP
+    // Multiplier based on timeframe for simulation
+    const tfMultipliers: Record<string, number> = {
+      '1m': 1,
+      '5m': 5,
+      '15m': 15,
+      '1h': 60,
+      '1d': 1440
+    };
+    const interval = tfMultipliers[tf] || 1;
+    
+    // Simulation logic based on asset
+    const basePrice: Record<string, number> = {
+      'BTCUSDT': 42000,
+      'ETHUSDT': 2300,
+      'SOLUSDT': 95
+    };
+    
+    const startPrice = basePrice[asset] || 1000;
     const data = [];
-    let currentTime = Math.floor(Date.now() / 1000) - (100 * 60);
-    let lastClose = 42000;
+    let currentTime = Math.floor(Date.now() / 1000) - (100 * interval * 60);
+    let lastClose = startPrice;
     
     for (let i = 0; i < 100; i++) {
+      const volatility = startPrice * 0.001 * interval;
       const open = lastClose;
-      const high = open + (Math.random() * 50);
-      const low = open - (Math.random() * 50);
+      const high = open + (Math.random() * volatility);
+      const low = open - (Math.random() * volatility);
       const close = low + (Math.random() * (high - low));
       
       data.push({
@@ -192,7 +210,7 @@ export async function registerRoutes(
         close
       });
       
-      currentTime += 60;
+      currentTime += interval * 60;
       lastClose = close;
     }
     

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createChart, ColorType, CandlestickSeries, createSeriesMarkers } from 'lightweight-charts';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@shared/routes';
@@ -10,11 +10,13 @@ export function TradeChart() {
   const chartRef = useRef<any>(null);
   const seriesRef = useRef<any>(null);
   const markersRef = useRef<any>(null);
+  const [asset, setAsset] = useState("BTCUSDT");
+  const [timeframe, setTimeframe] = useState("1m");
 
   const { data: ohlcData } = useQuery({
-    queryKey: [api.user.market.ohlc.path],
+    queryKey: [api.user.market.ohlc.path, asset, timeframe],
     queryFn: async () => {
-      const res = await fetch(api.user.market.ohlc.path);
+      const res = await fetch(`${api.user.market.ohlc.path}?asset=${asset}&tf=${timeframe}`);
       if (!res.ok) throw new Error("Failed to fetch OHLC");
       return res.json();
     },
@@ -100,8 +102,25 @@ export function TradeChart() {
           <h3 className="text-2xl font-black text-white tracking-tighter uppercase">BTC/USDT REAL-TIME</h3>
         </div>
         <div className="flex gap-2">
-          {['1m', '5m', '15m', '1h'].map(tf => (
-            <button key={tf} className="px-3 py-1 rounded-lg bg-zinc-950 border border-white/5 text-[10px] font-black text-zinc-500 hover:text-emerald-400 hover:border-emerald-500/30 transition-all uppercase">
+          <select 
+            value={asset} 
+            onChange={(e) => setAsset(e.target.value)}
+            className="bg-zinc-950 border border-white/5 text-[10px] font-black text-zinc-500 rounded-lg px-2 outline-none cursor-pointer"
+          >
+            <option value="BTCUSDT">BTC/USDT</option>
+            <option value="ETHUSDT">ETH/USDT</option>
+            <option value="SOLUSDT">SOL/USDT</option>
+          </select>
+          {['1m', '5m', '15m', '1h', '1d'].map(tf => (
+            <button 
+              key={tf} 
+              onClick={() => setTimeframe(tf)}
+              className={`px-3 py-1 rounded-lg border text-[10px] font-black transition-all uppercase ${
+                timeframe === tf 
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
+                  : 'bg-zinc-950 border-white/5 text-zinc-500 hover:text-emerald-400 hover:border-emerald-500/30'
+              }`}
+            >
               {tf}
             </button>
           ))}
