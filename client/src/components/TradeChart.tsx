@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { createChart, ColorType, ISeriesApi, CandlestickData } from 'lightweight-charts';
+import { createChart, ColorType } from 'lightweight-charts';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@shared/routes';
 import { Card } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { usePositions } from '@/hooks/use-positions';
 export function TradeChart() {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<any>(null);
-  const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+  const seriesRef = useRef<any>(null);
 
   const { data: ohlcData } = useQuery({
     queryKey: [api.user.market.ohlc.path],
@@ -40,9 +40,6 @@ export function TradeChart() {
         borderColor: 'rgba(39, 39, 42, 0.5)',
         timeVisible: true,
         secondsVisible: false,
-      },
-      rightPriceScale: {
-        borderColor: 'rgba(39, 39, 42, 0.5)',
       },
     });
 
@@ -77,13 +74,13 @@ export function TradeChart() {
         const markers = positions
           .filter(p => p.status === 'OPEN' || p.status === 'CLOSED')
           .map(p => ({
-            time: Math.floor(new Date(p.openedAt || Date.now()).getTime() / 1000) as any,
-            position: p.type === 'BUY' ? 'belowBar' : 'aboveBar' as any,
+            time: Math.floor(new Date(p.openedAt || Date.now()).getTime() / 1000),
+            position: p.type === 'BUY' ? 'belowBar' : 'aboveBar',
             color: p.type === 'BUY' ? '#10b981' : '#ef4444',
-            shape: p.type === 'BUY' ? 'arrowUp' : 'arrowDown' as any,
+            shape: p.type === 'BUY' ? 'arrowUp' : 'arrowDown',
             text: `BOT ${p.type}`,
           }));
-        (seriesRef.current as any).setMarkers(markers);
+        seriesRef.current.setMarkers(markers);
       }
     }
   }, [ohlcData, positions]);
