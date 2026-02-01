@@ -1,0 +1,154 @@
+
+🔍 MODULE : VISUALISATION DES TRADES & GRAPHIQUES (TRANSPARENCE CONTRÔLÉE)
+
+🎯 Objectif
+
+Permettre à l’utilisateur de :
+	•	voir que les bots trades réellement
+	•	comprendre ce qui est fait avec son argent
+	•	suivre les performances sans pouvoir interférer
+
+👉 Transparence oui, contrôle utilisateur non.
+
+⸻
+
+🧠 PRINCIPE GÉNÉRAL
+	•	Les bots prennent des positions réelles
+	•	Les positions sont :
+	•	exécutées
+	•	validées
+	•	clôturées automatiquement
+	•	L’utilisateur a accès à :
+	•	des graphiques
+	•	des positions agrégées
+	•	des résumés explicatifs
+
+📌 Aucune possibilité de modifier, fermer ou ouvrir une position.
+
+⸻
+
+📊 1️⃣ PAGE « GRAPHIQUES & MARCHÉ » (ESPACE UTILISATEUR)
+
+📍 Contenu principal
+
+🔹 Graphique en temps réel
+	•	Type : chandeliers (candlesticks)
+	•	Timeframes : 1m / 5m / 15m / 1h / 4h / 1D
+	•	Paires tradées (ex : BTC/USDT, ETH/USDT)
+
+🔹 Indicateurs visibles
+	•	Moyennes mobiles
+	•	RSI
+	•	Zones de support / résistance
+(sans exposer la stratégie complète)
+
+⸻
+
+🤖 Superposition des actions des bots
+
+Sur le graphique :
+	•	🔵 Flèche verte = position achat
+	•	🔴 Flèche rouge = position vente
+	•	🟡 Zone colorée = position ouverte
+	•	❌ Croix = position fermée
+
+➡️ L’utilisateur voit exactement quand le bot est entré et sorti.
+
+⸻
+
+📌 2️⃣ PAGE « POSITIONS DES BOTS »
+
+🔍 Liste des positions (lecture seule)
+
+Bot	Actif	Type	Entrée	Sortie	Résultat	Statut
+Scalping	BTC/USDT	BUY	42 100	42 560	+1.09%	Fermée
+Trend	ETH/USDT	BUY	2 310	—	+0.7%	Ouverte
+
+Informations visibles
+	•	Bot concerné
+	•	Actif tradé
+	•	Direction (Buy / Sell)
+	•	Profit ou perte (%)
+	•	Durée du trade
+	•	Statut
+
+⸻
+
+🧩 3️⃣ VALIDATION DES POSITIONS (LOGIQUE BOT)
+
+Chaque position suit un processus clair :
+	1.	Analyse marché
+	2.	Signal détecté
+	3.	Validation par règles de risque
+	4.	Exécution
+	5.	Surveillance
+	6.	Clôture automatique
+
+👉 L’utilisateur voit :
+
+Position validée par le Bot Trend – conditions marché favorables.
+
+⸻
+
+📈 4️⃣ GRAPHIQUES DE PERFORMANCE UTILISATEUR
+
+📊 Graphiques disponibles
+	•	Évolution du solde
+	•	Profit journalier
+	•	Profit cumulé
+	•	Jours gagnants / perdants
+	•	Utilisation du plafond journalier
+
+Exemple affiché :
+
+Profit du jour : +11.3% / max 16%
+
+⸻
+
+🛡️ 5️⃣ TRANSPARENCE SANS RISQUE
+
+Ce que l’utilisateur VOIT
+
+✅ Graphiques
+✅ Entrées / sorties
+✅ Résultats
+✅ Explications simplifiées
+
+Ce que l’utilisateur NE VOIT PAS
+
+❌ Code du bot
+❌ Paramètres internes
+❌ Stop-loss exact
+❌ Algorithmes décisionnels
+
+👉 Tu montres l’action, pas la recette.
+
+⸻
+
+🔔 6️⃣ NOTIFICATIONS LIÉES AUX POSITIONS
+
+L’utilisateur reçoit des notifications comme :
+	•	🤖 Le bot Scalping a ouvert une position BTC
+	•	✅ Position clôturée avec +1.4%
+	•	🛑 Bots en pause – volatilité élevée
+
+⸻
+
+🧾 7️⃣ MESSAGES PÉDAGOGIQUES (IMPORTANT)
+
+Sous chaque graphique :
+
+Les positions affichées sont prises automatiquement par les bots selon les conditions du marché. Les performances passées ne garantissent pas les performances futures.
+
+⸻
+
+🧱 8️⃣ INTÉGRATION DANS LA STRUCTURE DES PAGES
+
+Ajout dans l’espace utilisateur :
+	•	📊 Graphiques & Marché
+	•	🤖 Positions des Bots
+	•	📈 Historique des Trades
+
+Ces pages sont :
+	•	accessibles en lecture seule
+	•	mises à jour en temps quasi réel
