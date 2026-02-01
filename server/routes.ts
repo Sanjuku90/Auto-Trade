@@ -70,17 +70,14 @@ export async function registerRoutes(
         return res.status(400).json({ message: "Invalid amount" });
       }
 
-      // Create transaction
+      // Create PENDING transaction - admin must approve
       const tx = await storage.createTransaction({
         userId,
         type: "DEPOSIT",
         amount: input.amount,
-        status: "COMPLETED",
-        description: "Deposit to wallet",
+        status: "PENDING",
+        description: "Deposit request - awaiting admin approval",
       });
-
-      // Update wallet
-      await storage.updateWalletBalance(userId, input.amount);
 
       res.status(201).json(tx);
     } catch (err) {
@@ -106,17 +103,14 @@ export async function registerRoutes(
         return res.status(400).json({ message: "Insufficient funds" });
       }
 
-      // Create transaction
+      // Create PENDING transaction - admin must approve
       const tx = await storage.createTransaction({
         userId,
         type: "WITHDRAWAL",
         amount: input.amount,
-        status: "COMPLETED", // Instant withdrawal for MVP
-        description: "Withdrawal from wallet",
+        status: "PENDING",
+        description: "Withdrawal request - awaiting admin approval",
       });
-
-      // Update wallet (negative amount)
-      await storage.updateWalletBalance(userId, (-amount).toString());
 
       res.status(201).json(tx);
     } catch (err) {
@@ -180,6 +174,62 @@ export async function registerRoutes(
   app.post(api.admin.dailyStats.create.path, async (req, res) => {
     const stats = await storage.createDailyPerformance(req.body);
     res.status(201).json(stats);
+  });
+
+  // Get all pending transactions
+  app.get(api.admin.pendingTransactions.list.path, async (req, res) => {
+    const pending = await storage.getPendingTransactions();
+    res.json(pending);
+  });
+
+  // Approve a transaction
+  app.post(api.admin.pendingTransactions.approve.path, async (req, res) => {
+    const txId = Number(req.params.id);
+    const tx = await storage.getTransaction(txId);
+    
+    if (!tx) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+    
+    if (tx.status !== "PENDING") {
+      return res.status(400).json({ message: "Transaction is not pending" });
+    }
+
+    // Update status to COMPLETED
+    const updated = await storage.updateTransactionStatus(txId, "COMPLETED");
+    
+    // Apply wallet changes
+    if (tx.type === "DEPOSIT") {
+      await storage.updateWalletBalance(tx.userId, tx.amount);
+    } else if (tx.type === "WITHDRAWAL") {
+      await storage.updateWalletBalance(tx.userId, (-parseFloat(tx.amount)).toString());
+    }
+    
+    res.json(updated);
+  });
+
+  // Reject a transaction
+  app.post(api.admin.pendingTransactions.reject.path, async (req, res) => {
+    const txId = Number(req.params.id);
+    const tx = await storage.getTransaction(txId);
+    
+    if (!tx) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+    
+    if (tx.status !== "PENDING") {
+      return res.status(400).json({ message: "Transaction is not pending" });
+    }
+
+    // Update status to FAILED
+    const updated = await storage.updateTransactionStatus(txId, "FAILED");
+    res.json(updated);
+  });
+
+  // Get all users
+  app.get(api.admin.allUsers.list.path, async (req, res) => {
+    const users = await storage.getAllUsers();
+    res.json(users);
   });
 
   // Seed Data

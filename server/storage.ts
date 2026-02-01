@@ -28,6 +28,12 @@ export interface IStorage extends IAuthStorage {
   // Transactions
   getTransactions(userId: string): Promise<Transaction[]>;
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  getTransaction(id: number): Promise<Transaction | undefined>;
+  updateTransactionStatus(id: number, status: string): Promise<Transaction>;
+  getPendingTransactions(): Promise<(Transaction & { user: User })[]>;
+  
+  // Users
+  getAllUsers(): Promise<(User & { wallet: Wallet | null })[]>;
   
   // Daily Stats
   createDailyPerformance(stats: InsertDailyPerformance): Promise<DailyPerformance>;
@@ -133,6 +139,45 @@ export class DatabaseStorage implements IStorage {
   async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
     const [newTx] = await db.insert(transactions).values(transaction).returning();
     return newTx;
+  }
+
+  async getTransaction(id: number): Promise<Transaction | undefined> {
+    const [tx] = await db.select().from(transactions).where(eq(transactions.id, id));
+    return tx;
+  }
+
+  async updateTransactionStatus(id: number, status: string): Promise<Transaction> {
+    const [updated] = await db.update(transactions)
+      .set({ status })
+      .where(eq(transactions.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getPendingTransactions(): Promise<(Transaction & { user: User })[]> {
+    const result = await db.select({
+      transaction: transactions,
+      user: users,
+    })
+    .from(transactions)
+    .innerJoin(users, eq(transactions.userId, users.id))
+    .where(eq(transactions.status, "PENDING"))
+    .orderBy(desc(transactions.createdAt));
+    
+    return result.map(r => ({ ...r.transaction, user: r.user }));
+  }
+
+  // Users
+  async getAllUsers(): Promise<(User & { wallet: Wallet | null })[]> {
+    const allUsers = await db.select().from(users);
+    const result = [];
+    
+    for (const user of allUsers) {
+      const wallet = await this.getWallet(user.id);
+      result.push({ ...user, wallet: wallet || null });
+    }
+    
+    return result;
   }
 
   // Daily Stats

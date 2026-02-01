@@ -12,6 +12,11 @@ import {
 } from './schema';
 
 // ============================================
+// CONSTANTS
+// ============================================
+export const DEPOSIT_ADDRESS = "TNfP6AXj1cQfQSEscQDs9hkUKQnLx5GyBF";
+
+// ============================================
 // SHARED ERROR SCHEMAS
 // ============================================
 export const errorSchemas = {
@@ -127,6 +132,50 @@ export const api = {
         input: insertDailyPerformanceSchema,
         responses: {
           201: z.custom<typeof dailyPerformances.$inferSelect>(),
+          401: errorSchemas.unauthorized,
+        },
+      },
+    },
+    pendingTransactions: {
+      list: {
+        method: 'GET' as const,
+        path: '/api/admin/pending-transactions',
+        responses: {
+          200: z.array(z.custom<typeof transactions.$inferSelect & { user: { id: string; email: string | null; firstName: string | null; lastName: string | null } }>()),
+          401: errorSchemas.unauthorized,
+        },
+      },
+      approve: {
+        method: 'POST' as const,
+        path: '/api/admin/transactions/:id/approve',
+        responses: {
+          200: z.custom<typeof transactions.$inferSelect>(),
+          404: errorSchemas.notFound,
+          401: errorSchemas.unauthorized,
+        },
+      },
+      reject: {
+        method: 'POST' as const,
+        path: '/api/admin/transactions/:id/reject',
+        responses: {
+          200: z.custom<typeof transactions.$inferSelect>(),
+          404: errorSchemas.notFound,
+          401: errorSchemas.unauthorized,
+        },
+      },
+    },
+    allUsers: {
+      list: {
+        method: 'GET' as const,
+        path: '/api/admin/users',
+        responses: {
+          200: z.array(z.object({
+            id: z.string(),
+            email: z.string().nullable(),
+            firstName: z.string().nullable(),
+            lastName: z.string().nullable(),
+            wallet: z.custom<typeof wallets.$inferSelect>().nullable(),
+          })),
           401: errorSchemas.unauthorized,
         },
       },
