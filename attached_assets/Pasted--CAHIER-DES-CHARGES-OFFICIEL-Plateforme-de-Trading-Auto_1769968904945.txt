@@ -1,0 +1,300 @@
+
+
+📘 CAHIER DES CHARGES OFFICIEL
+
+Plateforme de Trading Automatisé par Bots
+
+⸻
+
+1️⃣ PRÉSENTATION GÉNÉRALE DU PROJET
+
+Nom du projet
+
+(provisoire – modifiable)
+
+Nature
+
+Plateforme web d’investissement basée sur le trading automatisé par bots, destinée aux utilisateurs souhaitant investir sans trader eux-mêmes.
+
+Objectif principal
+
+Permettre à un utilisateur de :
+	•	déposer une somme d’argent
+	•	confier ce capital à une infrastructure de bots de trading
+	•	percevoir des profits variables, générés automatiquement
+	•	avec un plafond journalier de performance fixé à 16–18% maximum du solde
+
+⸻
+
+2️⃣ POSITIONNEMENT & PHILOSOPHIE
+
+Positionnement
+	•	Technologie avant marketing
+	•	Discipline algorithmique
+	•	Transparence partielle mais pédagogique
+	•	Rendement élevé encadré, non garanti
+
+Message central
+
+Les bots tradent selon les conditions du marché.
+Les performances sont variables et plafonnées pour protéger le capital.
+
+⸻
+
+3️⃣ FONCTIONNEMENT GLOBAL
+
+Parcours utilisateur
+	1.	Inscription
+	2.	Dépôt de fonds
+	3.	Allocation automatique aux bots
+	4.	Trading automatisé
+	5.	Crédit progressif des profits
+	6.	Retrait à la demande
+
+L’utilisateur n’intervient jamais dans les décisions de trading.
+
+⸻
+
+4️⃣ ARCHITECTURE DES BOTS DE TRADING
+
+Principe
+
+Système multi-bots spécialisés, opérant simultanément.
+
+Types de bots
+
+Bot Scalping
+	•	Trades courts
+	•	Profits rapides
+	•	Forte liquidité
+
+Bot Trend Following
+	•	Détection de tendances
+	•	Trades moyens/longs
+
+Bot Range
+	•	Marchés latéraux
+	•	Exploitation supports/résistances
+
+Bot Événementiel (premium)
+	•	Activé uniquement lors d’événements majeurs
+	•	Forte surveillance
+
+Bot Sentinelle (sécurité)
+	•	Aucun profit recherché
+	•	Analyse du risque global
+	•	Peut stopper tous les bots
+
+⸻
+
+5️⃣ ALLOCATION DU CAPITAL
+
+Lors d’un dépôt, le capital est réparti automatiquement.
+
+Exemple :
+	•	Scalping : 30%
+	•	Trend : 25%
+	•	Range : 20%
+	•	Sécurité / Hedge : 25%
+
+Cette répartition peut être ajustée côté admin, sans intervention utilisateur.
+
+⸻
+
+6️⃣ LOGIQUE DES PROFITS & PLAFOND JOURNALIER
+
+Règle clé
+	•	Aucun rendement garanti
+	•	Profit réel du marché
+	•	Plafond journalier maximum : 16–18% du solde
+
+Mécanisme
+	•	Profit < plafond → crédit intégral
+	•	Profit > plafond → crédit plafonné
+	•	Excédent → réserve de stabilisation
+
+Rôle de la réserve
+	•	Absorber les pertes
+	•	Lisser les rendements
+	•	Sécuriser le système
+
+⸻
+
+7️⃣ GESTION DU RISQUE
+
+Règles automatiques
+	•	Drawdown max journalier (ex : 8–10%)
+	•	Stop-loss global
+	•	Pause automatique si :
+	•	volatilité excessive
+	•	pertes consécutives
+	•	Intervention du bot sentinelle
+
+La protection du capital est prioritaire sur la recherche de profit.
+
+⸻
+
+8️⃣ TYPES DE COMPTES
+
+Compte Standard
+	•	Bots de base
+	•	Plafond : 12–14%
+	•	Retrait normal
+
+Compte Advanced
+	•	Bots optimisés
+	•	Priorité d’exécution
+	•	Plafond : 16–18%
+
+Compte Pro
+	•	Bots événementiels
+	•	Rapports détaillés
+	•	Retraits accélérés
+
+⸻
+
+9️⃣ STRUCTURE COMPLÈTE DES PAGES
+
+🔓 Pages publiques
+	•	Accueil
+	•	Comment ça marche
+	•	Nos bots
+	•	Performances globales
+	•	Comptes & accès
+	•	FAQ
+	•	Risques & transparence
+	•	Mentions légales / CGU / Disclaimer
+
+⸻
+
+🔐 Authentification
+	•	Inscription
+	•	Connexion
+	•	Récupération mot de passe
+
+⸻
+
+👤 Espace utilisateur
+	•	Dashboard principal
+	•	Dépôt
+	•	Retrait
+	•	Performances personnelles
+	•	Bots actifs
+	•	Notifications
+	•	Paramètres
+
+⸻
+
+🛠️ Espace admin
+	•	Vue globale
+	•	Gestion bots
+	•	Gestion utilisateurs
+	•	Réserve de stabilisation
+	•	Sécurité & alertes
+
+⸻
+
+🔟 DASHBOARD UTILISATEUR (DÉTAIL)
+	•	Solde total
+	•	Capital investi
+	•	Profit du jour (progressif)
+	•	Barre plafond journalier
+	•	Bots actifs
+	•	Niveau de risque
+	•	Historique des gains
+
+⸻
+
+1️⃣1️⃣ DÉPÔTS & RETRAITS
+
+Dépôts
+	•	Crédit immédiat
+	•	Placement automatique
+	•	Historique visible
+
+Retraits
+	•	Profits à tout moment
+	•	Capital avec délai de sécurité
+	•	Traçabilité complète
+
+⸻
+
+1️⃣2️⃣ TRANSPARENCE & COMMUNICATION
+	•	Statistiques agrégées
+	•	% jours gagnants / neutres / négatifs
+	•	Messages explicatifs en cas de baisse
+	•	Aucun chiffre irréaliste affiché
+
+⸻
+
+1️⃣3️⃣ MODÈLE ÉCONOMIQUE
+
+Revenus plateforme
+	•	Commission sur profits
+	•	Comptes premium
+	•	Frais de retrait modérés
+	•	Services professionnels
+
+⸻
+
+1️⃣4️⃣ SÉCURITÉ
+	•	Chiffrement des données
+	•	Authentification sécurisée
+	•	Journalisation des actions
+	•	Séparation fonds / système
+	•	Surveillance continue
+
+⸻
+
+1️⃣5️⃣ TECHNOLOGIES (RECOMMANDÉ)
+
+Frontend
+	•	React / Vue
+	•	Interface mobile-first
+
+Backend
+	•	Python (Flask / FastAPI)
+	•	API sécurisée
+
+Bots
+	•	Python
+	•	APIs exchanges (Binance, etc.)
+	•	Services isolés
+
+Base de données
+	•	PostgreSQL / SQLite (MVP)
+
+⸻
+
+1️⃣6️⃣ ROADMAP
+
+Phase 1 – MVP
+	•	Bots de base
+	•	Dashboard
+	•	Dépôt / retrait
+
+Phase 2 – Optimisation
+	•	Réserve
+	•	Comptes premium
+	•	Sécurité renforcée
+
+Phase 3 – Expansion
+	•	App mobile
+	•	Copy trading
+	•	Internationalisation
+
+⸻
+
+1️⃣7️⃣ RISQUES & LIMITES (ASSUMÉS)
+	•	Volatilité du marché
+	•	Pertes possibles
+	•	Interruption temporaire des bots
+	•	Dépendance aux APIs externes
+
+➡️ Tous ces points sont communiqués clairement à l’utilisateur.
+
+⸻
+
+1️⃣8️⃣ CONCLUSION OFFICIELLE
+
+Ce projet repose sur une approche disciplinée du trading automatisé, visant des performances élevées mais encadrées, avec une priorité absolue donnée à la gestion du risque et à la durabilité du modèle.
