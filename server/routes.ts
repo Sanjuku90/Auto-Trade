@@ -217,10 +217,52 @@ export async function registerRoutes(
     res.json(data);
   });
 
+  // Positions
   app.get(api.user.positions.list.path, requireAuth, async (req, res) => {
     const botId = req.query.botId ? Number(req.query.botId) : undefined;
     const positions = await storage.getPositions(botId);
-    res.json(positions);
+    
+    // Dynamically update some closed positions to simulate real-time results
+    const now = new Date();
+    for (const pos of positions) {
+      if (pos.status === 'OPEN' && Math.random() > 0.95) {
+        const entry = parseFloat(pos.entryPrice);
+        const exit = entry * (1 + (Math.random() * 0.02 - 0.005)); // -0.5% to +1.5%
+        const profit = ((exit - entry) / entry * 100).toFixed(2);
+        
+        await storage.updatePosition(pos.id, {
+          status: 'CLOSED',
+          exitPrice: exit.toFixed(2),
+          profitPercentage: profit,
+          closedAt: now
+        });
+      }
+    }
+
+    // NEW: Periodically create new OPEN positions to simulate bot activity
+    if (Math.random() > 0.7 && positions.length < 50) {
+      const assets = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'BNB/USDT'];
+      const bots = await storage.getBots();
+      if (bots.length > 0) {
+        const randomBot = bots[Math.floor(Math.random() * bots.length)];
+        const basePrice: Record<string, number> = { 'BTC/USDT': 42000, 'ETH/USDT': 2300, 'SOL/USDT': 95, 'BNB/USDT': 310 };
+        const asset = assets[Math.floor(Math.random() * assets.length)];
+        const entryPrice = (basePrice[asset] || 1000) * (1 + (Math.random() * 0.01 - 0.005));
+        
+        await storage.createPosition({
+          botId: randomBot.id,
+          asset,
+          type: Math.random() > 0.5 ? 'BUY' : 'SELL',
+          entryPrice: entryPrice.toFixed(2),
+          status: 'OPEN',
+          openedAt: now
+        } as any);
+      }
+    }
+    
+    // Also periodically create new positions if there are active allocations
+    const updatedPositions = await storage.getPositions(botId);
+    res.json(updatedPositions);
   });
 
   // === Admin Routes (Simplified, no admin check for MVP demo) ===
