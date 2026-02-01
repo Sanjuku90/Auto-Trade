@@ -4,13 +4,14 @@ import { StatCard } from "@/components/StatCard";
 import { PerformanceChart } from "@/components/PerformanceChart";
 import { TransactionTable } from "@/components/TransactionTable";
 import { Button } from "@/components/ui/button";
-import { Wallet, TrendingUp, PiggyBank, Plus, Minus } from "lucide-react";
+import { Wallet, TrendingUp, PiggyBank, Plus, Minus, Copy } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useDeposit, useWithdraw } from "@/hooks/use-portfolio";
 import { useToast } from "@/hooks/use-toast";
+import { DEPOSIT_ADDRESS } from "@shared/routes";
 
 function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +65,27 @@ function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
           <DialogTitle>{isDeposit ? "Add Funds" : "Withdraw Funds"}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
+          {isDeposit && (
+            <div className="space-y-2 p-3 bg-zinc-950 border border-zinc-700 rounded-lg">
+              <Label className="text-xs text-zinc-400">Send USDT (TRC20) to this address:</Label>
+              <div className="flex items-center gap-2">
+                <code className="font-mono text-emerald-400 text-xs break-all flex-1">{DEPOSIT_ADDRESS}</code>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8"
+                  onClick={() => {
+                    navigator.clipboard.writeText(DEPOSIT_ADDRESS);
+                    toast({ title: "Copied", description: "Address copied to clipboard" });
+                  }}
+                  data-testid="button-copy-deposit-address"
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-amber-500">After sending, enter the amount below to submit your request for approval.</p>
+            </div>
+          )}
           <div className="space-y-2">
             <Label htmlFor="amount">Amount (USD)</Label>
             <Input 
@@ -73,6 +95,7 @@ function ActionDialog({ type }: { type: "deposit" | "withdraw" }) {
               onChange={(e) => setAmount(e.target.value)}
               className="bg-zinc-950 border-zinc-700 font-mono text-lg"
               placeholder="0.00"
+              data-testid="input-amount"
             />
           </div>
         </div>

@@ -8,6 +8,7 @@ import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import Bots from "@/pages/Bots";
 import Transactions from "@/pages/Transactions";
+import Admin from "@/pages/Admin";
 import { useAuth } from "@/hooks/use-auth";
 
 // Auth Guard Wrapper
@@ -37,6 +38,7 @@ function Router() {
       <Route path="/transactions">
         <ProtectedRoute component={Transactions} />
       </Route>
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );
