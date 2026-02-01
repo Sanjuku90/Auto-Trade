@@ -1,38 +1,145 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { 
+  users, bots, allocations, dailyPerformances, transactions, wallets,
+  type User, type UpsertUser, type Bot, type InsertBot, 
+  type Allocation, type InsertAllocation, 
+  type DailyPerformance, type InsertDailyPerformance,
+  type Transaction, type InsertTransaction,
+  type Wallet
+} from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, and } from "drizzle-orm";
+import { authStorage, type IAuthStorage } from "./replit_integrations/auth/storage";
 
-// modify the interface with any CRUD methods
-// you might need
-
-export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+export interface IStorage extends IAuthStorage {
+  // Bots
+  getBots(): Promise<(Bot & { recentPerformance: DailyPerformance[] })[]>;
+  getBot(id: number): Promise<Bot | undefined>;
+  createBot(bot: InsertBot): Promise<Bot>;
+  
+  // Wallet & Portfolio
+  getWallet(userId: string): Promise<Wallet | undefined>;
+  createWallet(userId: string): Promise<Wallet>;
+  updateWalletBalance(userId: string, amount: string): Promise<Wallet>; // amount can be negative
+  
+  // Allocations
+  getAllocations(userId: string): Promise<(Allocation & { bot: Bot })[]>;
+  createAllocation(allocation: InsertAllocation): Promise<Allocation>;
+  
+  // Transactions
+  getTransactions(userId: string): Promise<Transaction[]>;
+  createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  
+  // Daily Stats
+  createDailyPerformance(stats: InsertDailyPerformance): Promise<DailyPerformance>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
-  }
-
+export class DatabaseStorage implements IStorage {
+  // Auth methods delegated to imported authStorage or implemented here if overriding
+  // Since we need to implement IAuthStorage, we can just use the imported one's methods or reimplement using db
+  // Re-implementing to keep it clean in one class using the same db instance
+  
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    return authStorage.getUser(id);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async upsertUser(user: UpsertUser): Promise<User> {
+    const upsertedUser = await authStorage.upsertUser(user);
+    // Ensure wallet exists
+    const existingWallet = await this.getWallet(upsertedUser.id);
+    if (!existingWallet) {
+      await this.createWallet(upsertedUser.id);
+    }
+    return upsertedUser;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  // Bots
+  async getBots(): Promise<(Bot & { recentPerformance: DailyPerformance[] })[]> {
+    const allBots = await db.select().from(bots);
+    const result = [];
+    
+    for (const bot of allBots) {
+      const perf = await db.select()
+        .from(dailyPerformances)
+        .where(eq(dailyPerformances.botId, bot.id))
+        .orderBy(desc(dailyPerformances.date))
+        .limit(7);
+      result.push({ ...bot, recentPerformance: perf });
+    }
+    
+    return result;
+  }
+
+  async getBot(id: number): Promise<Bot | undefined> {
+    const [bot] = await db.select().from(bots).where(eq(bots.id, id));
+    return bot;
+  }
+
+  async createBot(bot: InsertBot): Promise<Bot> {
+    const [newBot] = await db.insert(bots).values(bot).returning();
+    return newBot;
+  }
+
+  // Wallet
+  async getWallet(userId: string): Promise<Wallet | undefined> {
+    const [wallet] = await db.select().from(wallets).where(eq(wallets.userId, userId));
+    return wallet;
+  }
+
+  async createWallet(userId: string): Promise<Wallet> {
+    const [wallet] = await db.insert(wallets).values({ userId, balance: "0", totalProfit: "0" }).returning();
+    return wallet;
+  }
+
+  async updateWalletBalance(userId: string, amount: string): Promise<Wallet> {
+    // This is a naive implementation. In production, handle concurrency/locking.
+    const wallet = await this.getWallet(userId);
+    if (!wallet) throw new Error("Wallet not found");
+    
+    const newBalance = (parseFloat(wallet.balance) + parseFloat(amount)).toFixed(2);
+    const [updated] = await db.update(wallets)
+      .set({ balance: newBalance, updatedAt: new Date() })
+      .where(eq(wallets.userId, userId))
+      .returning();
+      
+    return updated;
+  }
+
+  // Allocations
+  async getAllocations(userId: string): Promise<(Allocation & { bot: Bot })[]> {
+    const result = await db.select({
+      allocation: allocations,
+      bot: bots,
+    })
+    .from(allocations)
+    .innerJoin(bots, eq(allocations.botId, bots.id))
+    .where(and(eq(allocations.userId, userId), eq(allocations.active, true)));
+    
+    return result.map(r => ({ ...r.allocation, bot: r.bot }));
+  }
+
+  async createAllocation(allocation: InsertAllocation): Promise<Allocation> {
+    const [newAllocation] = await db.insert(allocations).values(allocation).returning();
+    return newAllocation;
+  }
+
+  // Transactions
+  async getTransactions(userId: string): Promise<Transaction[]> {
+    return await db.select()
+      .from(transactions)
+      .where(eq(transactions.userId, userId))
+      .orderBy(desc(transactions.createdAt));
+  }
+
+  async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
+    const [newTx] = await db.insert(transactions).values(transaction).returning();
+    return newTx;
+  }
+
+  // Daily Stats
+  async createDailyPerformance(stats: InsertDailyPerformance): Promise<DailyPerformance> {
+    const [newStats] = await db.insert(dailyPerformances).values(stats).returning();
+    return newStats;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
