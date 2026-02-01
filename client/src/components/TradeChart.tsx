@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { createChart, ColorType } from 'lightweight-charts';
+import { createChart, ColorType, CandlestickSeries } from 'lightweight-charts';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@shared/routes';
 import { Card } from '@/components/ui/card';
@@ -43,7 +43,7 @@ export function TradeChart() {
       },
     });
 
-    const candlestickSeries = (chart as any).addCandlestickSeries({
+    const candlestickSeries = chart.addSeries(CandlestickSeries, {
       upColor: '#10b981',
       downColor: '#ef4444',
       borderVisible: false,
