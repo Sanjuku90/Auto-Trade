@@ -93,35 +93,35 @@ export function BotCard({ bot }: BotCardProps) {
           </DialogTrigger>
           <DialogContent className="bg-zinc-900 border-zinc-800 text-white sm:max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-xl">Allocate Capital to {bot.name}</DialogTitle>
+              <DialogTitle className="text-xl font-black uppercase tracking-tighter">Allocate Capital to {bot.name}</DialogTitle>
             </DialogHeader>
-            <div className="py-4 space-y-4">
-              <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-sm">
-                Expected daily return up to {bot.dailyCapPercentage}%. Capital is locked for 24h cycles.
+            <div className="py-4 space-y-6">
+              <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 text-[10px] font-black uppercase tracking-widest leading-relaxed">
+                "Expected daily return up to {bot.dailyCapPercentage}%. Capital is locked for 24h cycles within the algorithmic execution cluster."
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="amount">Amount (USD)</Label>
+              <div className="space-y-3">
+                <Label htmlFor="amount" className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Amount (USD)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-black">$</span>
                   <Input
                     id="amount"
                     type="number"
                     placeholder="1000.00"
-                    className="pl-7 bg-zinc-950 border-zinc-700 focus-visible:ring-emerald-500 font-mono text-lg"
+                    className="pl-8 bg-zinc-950 border-zinc-800 focus-visible:ring-emerald-500 font-mono text-xl h-14 rounded-xl"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                   />
                 </div>
               </div>
             </div>
-            <div className="flex justify-end gap-3">
-              <Button variant="ghost" onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-white">Cancel</Button>
+            <div className="flex justify-end gap-3 pt-2">
+              <Button variant="ghost" onClick={() => setIsOpen(false)} className="rounded-xl font-bold uppercase tracking-widest text-xs h-11 text-zinc-500">Abort</Button>
               <Button 
                 onClick={handleAllocate} 
                 disabled={isPending}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white min-w-[100px]"
+                className="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black uppercase tracking-widest text-xs h-11 px-8 shadow-xl shadow-emerald-900/20"
               >
-                {isPending ? "Processing..." : "Confirm"}
+                {isPending ? "Executing..." : "Confirm Deployment"}
               </Button>
             </div>
           </DialogContent>

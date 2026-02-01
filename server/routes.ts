@@ -123,7 +123,51 @@ export async function registerRoutes(
   });
 
   app.post(api.user.allocate.path, requireAuth, async (req: any, res) => {
-    // ... logic for allocate
+    try {
+      const input = api.user.allocate.input.parse(req.body);
+      const userId = req.user.claims.sub;
+      const botId = Number(input.botId);
+      const amount = parseFloat(input.amount);
+
+      if (isNaN(amount) || amount <= 0) {
+        return res.status(400).json({ message: "Invalid amount" });
+      }
+
+      const wallet = await storage.getWallet(userId);
+      if (!wallet || parseFloat(wallet.balance) < amount) {
+        return res.status(400).json({ message: "Insufficient balance for allocation" });
+      }
+
+      const bot = await storage.getBot(botId);
+      if (!bot) {
+        return res.status(404).json({ message: "Bot node not found" });
+      }
+
+      // Deduct from wallet and create allocation
+      await storage.updateWalletBalance(userId, (-amount).toString());
+      const allocation = await storage.createAllocation({
+        userId,
+        botId,
+        amount: input.amount,
+        status: "ACTIVE",
+      });
+
+      // Create a ledger entry for the allocation
+      await storage.createTransaction({
+        userId,
+        type: "ALLOCATION",
+        amount: input.amount,
+        status: "COMPLETED",
+        description: `Deployed capital to ${bot.name} node`,
+      });
+
+      res.status(201).json(allocation);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.message });
+      }
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   });
 
   app.get(api.user.positions.list.path, requireAuth, async (req, res) => {
