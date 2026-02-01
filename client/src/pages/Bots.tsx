@@ -12,11 +12,10 @@ export default function Bots() {
       
       <main className="flex-1 lg:ml-64 p-6 lg:p-12 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
-          <header className="mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4">Bot Market</h1>
-            <p className="text-zinc-400 max-w-2xl text-lg">
-              Choose from our selection of high-performance trading algorithms. 
-              Each bot is optimized for different market conditions with strict risk management.
+          <header className="mb-16">
+            <h1 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase">BOT INFRASTRUCTURE</h1>
+            <p className="text-zinc-500 max-w-2xl text-lg font-medium italic">
+              "Deploy specialized algorithmic nodes designed for distinct market regimes. Each bot operates within strict risk boundaries."
             </p>
           </header>
 

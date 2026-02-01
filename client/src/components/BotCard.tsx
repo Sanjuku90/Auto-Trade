@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useAllocate } from "@/hooks/use-portfolio";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
 
 interface BotCardProps {
   bot: Bot & { recentPerformance?: any[] };
@@ -53,32 +54,32 @@ export function BotCard({ bot }: BotCardProps) {
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-all duration-300 flex flex-col h-full overflow-hidden group">
-      <div className="p-6 flex-1 flex flex-col">
-        <div className="flex justify-between items-start mb-4">
-          <Badge variant="outline" className={`${getRiskColor(bot.riskLevel)} border-0 font-mono tracking-wider text-xs`}>
+    <Card className="bg-zinc-900/40 backdrop-blur-md border-zinc-800/50 hover:border-emerald-500/30 transition-all duration-500 flex flex-col h-full overflow-hidden group shadow-2xl">
+      <div className="p-8 flex-1 flex flex-col relative">
+        <div className="flex justify-between items-start mb-6">
+          <Badge variant="outline" className={cn(getRiskColor(bot.riskLevel), "border-0 font-mono tracking-widest text-[10px] font-black px-2 py-1 uppercase")}>
             {bot.riskLevel} RISK
           </Badge>
-          <div className="flex items-center text-emerald-400 text-sm font-mono font-medium">
-            <Zap className="w-3 h-3 mr-1" />
-            Cap: {bot.dailyCapPercentage}%
+          <div className="flex items-center text-emerald-400 text-xs font-mono font-black tracking-tighter">
+            <Zap className="w-3.5 h-3.5 mr-1.5 fill-emerald-400/20" />
+            CAP: {bot.dailyCapPercentage}%
           </div>
         </div>
 
-        <h3 className="text-xl font-bold text-white mb-2">{bot.name}</h3>
-        <p className="text-zinc-400 text-sm leading-relaxed mb-6 flex-1">
+        <h3 className="text-2xl font-black text-white mb-3 tracking-tighter group-hover:text-emerald-400 transition-colors">{bot.name}</h3>
+        <p className="text-zinc-500 text-sm leading-relaxed mb-8 flex-1 font-medium">
           {bot.description}
         </p>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="p-3 bg-zinc-950/50 rounded-lg border border-white/5">
-            <div className="text-xs text-zinc-500 mb-1">Type</div>
-            <div className="text-sm font-medium text-zinc-200">{bot.type}</div>
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="p-4 bg-zinc-950/30 rounded-2xl border border-white/5 group-hover:bg-zinc-950/50 transition-colors">
+            <div className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Type</div>
+            <div className="text-sm font-bold text-zinc-300">{bot.type}</div>
           </div>
-          <div className="p-3 bg-zinc-950/50 rounded-lg border border-white/5">
-            <div className="text-xs text-zinc-500 mb-1">Status</div>
-            <div className="text-sm font-medium text-emerald-500 flex items-center">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 animate-pulse" />
+          <div className="p-4 bg-zinc-950/30 rounded-2xl border border-white/5 group-hover:bg-zinc-950/50 transition-colors">
+            <div className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Status</div>
+            <div className="text-sm font-bold text-emerald-500 flex items-center">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
               {bot.status}
             </div>
           </div>
@@ -86,8 +87,8 @@ export function BotCard({ bot }: BotCardProps) {
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 group-hover:shadow-emerald-900/40 transition-all">
-              Start Trading <ArrowRight className="w-4 h-4 ml-2" />
+            <Button className="w-full h-14 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-900/20 group-hover:shadow-emerald-500/20 transition-all duration-300 border-0 active:scale-[0.98]">
+              Deploy Bot <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </DialogTrigger>
           <DialogContent className="bg-zinc-900 border-zinc-800 text-white sm:max-w-md">

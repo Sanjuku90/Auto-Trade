@@ -7,7 +7,6 @@ interface DataPoint {
   value: number;
 }
 
-// Generate dummy data if real data is scarce
 const generateData = () => {
   const data: DataPoint[] = [];
   for (let i = 30; i >= 0; i--) {
@@ -23,16 +22,16 @@ export function PerformanceChart({ data }: { data?: DataPoint[] }) {
   const chartData = data && data.length > 0 ? data : generateData();
 
   return (
-    <Card className="p-6 bg-zinc-900 border-zinc-800 shadow-lg h-[400px]">
-      <div className="flex justify-between items-center mb-6">
+    <Card className="p-8 bg-zinc-900/40 backdrop-blur-md border border-zinc-800/50 rounded-3xl shadow-2xl h-[450px] group">
+      <div className="flex justify-between items-center mb-10">
         <div>
-          <h3 className="text-lg font-semibold text-white">Performance Overview</h3>
-          <p className="text-sm text-zinc-500">Daily profit percentage over the last 30 days</p>
+          <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Performance Analytics</div>
+          <h3 className="text-2xl font-black text-white tracking-tighter uppercase">PORTFOLIO YIELD</h3>
         </div>
-        <div className="flex gap-2">
-          <div className="flex items-center gap-2 text-xs text-zinc-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Profit
+        <div className="flex gap-4">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black text-emerald-500 uppercase tracking-widest">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]" />
+            Profitability
           </div>
         </div>
       </div>
@@ -42,43 +41,55 @@ export function PerformanceChart({ data }: { data?: DataPoint[] }) {
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} opacity={0.1} />
             <XAxis 
               dataKey="date" 
               stroke="#52525b" 
-              fontSize={12} 
+              fontSize={10} 
+              fontWeight="bold"
               tickLine={false} 
               axisLine={false}
               minTickGap={30}
+              dy={10}
             />
             <YAxis 
               stroke="#52525b" 
-              fontSize={12} 
+              fontSize={10} 
+              fontWeight="bold"
               tickLine={false} 
               axisLine={false}
               tickFormatter={(value) => `${value}%`}
+              dx={-10}
             />
             <Tooltip 
               contentStyle={{ 
-                backgroundColor: '#18181b', 
-                borderColor: '#27272a',
-                borderRadius: '8px',
-                color: '#fff'
+                backgroundColor: 'rgba(24, 24, 27, 0.95)', 
+                borderColor: 'rgba(16, 185, 129, 0.2)',
+                borderRadius: '16px',
+                borderWidth: '1px',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)',
+                color: '#fff',
+                fontSize: '12px',
+                fontWeight: '900',
+                padding: '12px'
               }}
-              itemStyle={{ color: '#10b981' }}
-              labelStyle={{ color: '#a1a1aa', marginBottom: '4px' }}
+              itemStyle={{ color: '#10b981', textTransform: 'uppercase' }}
+              labelStyle={{ color: '#a1a1aa', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em' }}
+              cursor={{ stroke: '#10b981', strokeWidth: 1, strokeDasharray: '4 4' }}
             />
             <Area 
               type="monotone" 
               dataKey="value" 
               stroke="#10b981" 
-              strokeWidth={2}
+              strokeWidth={3}
               fillOpacity={1} 
               fill="url(#colorProfit)" 
+              animationDuration={2000}
             />
           </AreaChart>
         </ResponsiveContainer>

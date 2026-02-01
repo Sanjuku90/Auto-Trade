@@ -40,7 +40,7 @@
   --input: 240 3.7% 15.9%;
   --ring: 142 76% 36%;
  
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 }
  
 @layer base {
@@ -48,14 +48,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans);
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight font-semibold;
+    @apply tracking-tight font-bold text-white;
   }
   .font-mono {
     font-family: var(--font-mono);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-zinc-900/40 backdrop-blur-md border border-white/5 shadow-2xl;
+  }
+  .emerald-gradient {
+    @apply bg-gradient-to-br from-emerald-500 to-emerald-700;
   }
 }
 
